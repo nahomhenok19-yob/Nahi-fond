@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    background:black;
+    color:white;
+    font-family:Arial;
+}
+
+/* VIDEO GRID */
+#videos{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:10px;
+}
+
+video{
+    width:200px;
+    height:150px;
+    border:2px solid red;
+    object-fit:cover;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🔥 NAHI FOND GROUP CALL</h2>
+
+<input id="room" placeholder="room id">
+<input id="name" placeholder="your name">
+<button onclick="joinRoom()">Join</button>
+
+<div id="videos"></div>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script src="/static/group.js"></script>
+
+</body>
+</html>

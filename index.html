@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Nahom Login</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="login">
+<h2>Nahom Login</h2>
+
+<input type="text" placeholder="Name">
+<input type="password" placeholder="Password">
+
+<button>Login</button>
+
+</div>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+  margin:0;
+  background:#000;
+  color:white;
+  font-family:Arial;
+}
+
+.video-container{
+  height:100vh;
+  overflow-y:scroll;
+  scroll-snap-type:y mandatory;
+}
+
+.video{
+  height:100vh;
+  scroll-snap-align:start;
+  position:relative;
+}
+
+video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.overlay{
+  position:absolute;
+  bottom:50px;
+  left:20px;
+}
+
+button{
+  margin:5px;
+}
+</style>
+</head>
+
+<body>
+
+<h3>Welcome {{user}}</h3>
+<a href="/upload">Upload</a>
+<a href="/logout">Logout</a>
+
+<div class="video-container">
+
+{% for v in videos %}
+<div class="video">
+  <video src="/static/videos/{{v}}" controls></video>
+
+  <div class="overlay">
+    <button onclick="like(this)">❤️ Like</button>
+    <button onclick="share()">Share</button>
+  </div>
+</div>
+{% endfor %}
+
+</div>
+
+<script>
+// DOUBLE TAP LIKE
+let lastTap = 0;
+
+function like(btn){
+  btn.innerText = "❤️ Liked";
+}
+
+document.addEventListener("click", function(){
+  let now = Date.now();
+  if(now - lastTap < 300){
+    alert("Liked by double tap ❤️");
+  }
+  lastTap = now;
+});
+
+function share(){
+  alert("Shared!");
+}
+</script>
+
+</body>
+</html>
+<h2>Upload Video</h2>
+
+<form method="POST" enctype="multipart/form-data">
+  <input type="file" name="video">
+  <button>Upload</button>
+</form>
+<video onplay="fetch('/view/{{v.id}}')"
+       src="/uploads/{{v.filename}}"
+       controls>
+</video>
+<div class="logo">NAHI FOND</div>
+<h1>NAHI FOND</h1>
+<div class="topbar">
+    <div class="logo">NAHI FOND 🔴</div>
+    <div>🔥 For You</div>
+</div>
+<h2 style="color:red;">NAHI FOND</h2>
+<p style="color:white;">Welcome to short video universe</p>
+<h2>Welcome to Nahi Fond</h2>
+a

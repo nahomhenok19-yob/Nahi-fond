@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+</head>
+<body>
+
+<h1>Dashboard</h1>
+
+<h3 id="welcome"></h3>
+
+<button onclick="logout()">Logout</button>
+
+<script>
+// check if user logged in
+let user = localStorage.getItem("user");
+
+if (!user) {
+    window.location.href = "index.html";
+} else {
+    document.getElementById("welcome").innerText =
+        "Welcome " + user;
+}
+
+function logout() {
+    localStorage.removeItem("user");
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
+<h1>Dashboard</h1>
+
+<h3>Welcome {{ user }}</h3>
+
+<a href="/logout">Logout</a>

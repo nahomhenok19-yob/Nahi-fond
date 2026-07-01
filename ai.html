@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    background:black;
+    color:white;
+    font-family:Arial;
+}
+
+.box{
+    padding:10px;
+    border:1px solid red;
+    margin:10px;
+}
+
+button{
+    background:red;
+    border:none;
+    padding:10px;
+    margin:5px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🔥 NAHI FOND AI VISION SYSTEM</h2>
+
+<!-- IMAGE AI -->
+<div class="box">
+    <h3>🖼️ Image Analysis</h3>
+    <input type="file" id="img">
+    <button onclick="imgAI()">Analyze Image</button>
+</div>
+
+<!-- VIDEO AI -->
+<div class="box">
+    <h3>🎥 Video Analysis</h3>
+    <input type="file" id="vid">
+    <button onclick="vidAI()">Analyze Video</button>
+</div>
+
+<!-- IMAGE GENERATION -->
+<div class="box">
+    <h3>🎨 Generate Image</h3>
+    <input id="prompt" placeholder="Describe image">
+    <button onclick="gen()">Generate</button>
+</div>
+
+<script>
+
+/* IMAGE AI */
+async function imgAI(){
+
+    let file = document.getElementById("img").files[0];
+
+    let form = new FormData();
+    form.append("file",file);
+
+    let res = await fetch("/analyze-image",{
+        method:"POST",
+        body:form
+    });
+
+    let data = await res.json();
+    alert(data.result);
+}
+
+/* VIDEO AI */
+async function vidAI(){
+
+    let file = document.getElementById("vid").files[0];
+
+    let form = new FormData();
+    form.append("file",file);
+
+    let res = await fetch("/analyze-video",{
+        method:"POST",
+        body:form
+    });
+
+    let data = await res.json();
+    alert("Frames: " + data.frames_analyzed);
+}
+
+/* IMAGE GENERATION */
+async function gen(){
+
+    let prompt = document.getElementById("prompt").value;
+
+    let res = await fetch("/generate-image",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({prompt})
+    });
+
+    let data = await res.json();
+
+    window.open(data.image);
+}
+</script>
+
+</body>
+</html>

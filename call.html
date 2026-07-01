@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAHI FOND CALL</title>
+
+<style>
+body{
+    margin:0;
+    background:black;
+    color:white;
+    text-align:center;
+    font-family:Arial;
+}
+
+video{
+    width:45%;
+    border:2px solid red;
+    margin:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🔥 NAHI FOND VIDEO CALL</h2>
+
+<input id="username" placeholder="your name">
+<input id="to" placeholder="call user">
+<button onclick="join()">Join</button>
+<button onclick="startCall()">Start Call</button>
+
+<br>
+
+<video id="localVideo" autoplay muted></video>
+<video id="remoteVideo" autoplay></video>
+
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script src="/static/webrtc.js"></script>
+
+</body>
+</html>

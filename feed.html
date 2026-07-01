@@ -1,0 +1,457 @@
+<h2>Welcome {{user.display_name}}</h2>
+
+<a href="/logout">Logout</a>
+
+<div style="height:100vh; overflow-y:scroll; scroll-snap-type:y mandatory;">
+
+{% for v in videos %}
+<div style="height:100vh; scroll-snap-align:start; background:black; color:white;">
+
+  <video src="/uploads/{{v.filename}}" controls style="width:100%; height:80%; object-fit:cover;"></video>
+
+  <a href="/like/{{v.id}}">❤️ Like</a>
+
+  <form method="POST" action="/comment/{{v.id}}">
+    <input name="text" placeholder="comment">
+    <button>Send</button>
+  </form>
+
+</div>
+{% endfor %}
+
+</div>
+
+<form action="/upload" method="POST" enctype="multipart/form-data">
+  <input type="file" name="video">
+  <button>Upload</button>
+</form>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    background:black;
+    font-family:Arial;
+    color:white;
+}
+
+/* TOP BAR */
+.topbar{
+    position:fixed;
+    top:0;
+    width:100%;
+    height:50px;
+    background:black;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 15px;
+    border-bottom:1px solid red;
+    z-index:10;
+}
+
+.logo{
+    color:red;
+    font-weight:bold;
+}
+
+/* FEED */
+.feed{
+    height:100vh;
+    overflow-y:scroll;
+    scroll-snap-type:y mandatory;
+}
+
+.videoBox{
+    height:100vh;
+    position:relative;
+    scroll-snap-align:start;
+    background:black;
+}
+
+video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* RIGHT ACTION BAR */
+.actions{
+    position:absolute;
+    right:10px;
+    bottom:120px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.btn{
+    background:rgba(255,0,0,0.15);
+    border:1px solid red;
+    color:white;
+    padding:10px;
+    border-radius:50%;
+    text-align:center;
+    font-size:18px;
+    cursor:pointer;
+}
+
+/* USER INFO */
+.user{
+    position:absolute;
+    bottom:80px;
+    left:15px;
+}
+
+.username{
+    color:red;
+    font-weight:bold;
+}
+
+.caption{
+    font-size:13px;
+    opacity:0.8;
+}
+
+/* UPLOAD BUTTON */
+.upload{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:red;
+    color:black;
+    padding:12px 20px;
+    border-radius:30px;
+    font-weight:bold;
+    text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+    <div class="logo">RED TOK</div>
+    <div>🔥</div>
+</div>
+
+<div class="feed">
+
+{% for v in videos %}
+<div class="videoBox">
+
+    <video src="/uploads/{{v.filename}}" autoplay loop muted></video>
+
+    <div class="actions">
+        <div class="btn">❤️</div>
+        <div class="btn">💬</div>
+        <div class="btn">↗</div>
+    </div>
+
+    <div class="user">
+        <div class="username">@user{{v.user_id}}</div>
+        <div class="caption">Red Black Viral Feed</div>
+    </div>
+
+</div>
+{% endfor %}
+
+</div>
+
+<a class="upload" href="/upload">+ UPLOAD</a>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    background:black;
+    overflow:hidden;
+    font-family:Arial;
+}
+
+/* FEED CONTAINER */
+.feed{
+    height:100vh;
+    overflow-y:scroll;
+    scroll-snap-type:y mandatory;
+    scroll-behavior:smooth;
+}
+
+/* VIDEO */
+.videoBox{
+    height:100vh;
+    scroll-snap-align:start;
+    position:relative;
+}
+
+video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* RIGHT ACTIONS */
+.actions{
+    position:absolute;
+    right:15px;
+    bottom:120px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.btn{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:rgba(255,0,0,0.15);
+    border:1px solid red;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:20px;
+    transition:0.2s;
+}
+
+/* BUTTON ANIMATION */
+.btn:active{
+    transform:scale(0.85);
+    background:red;
+}
+
+/* HEART ANIMATION */
+.heart{
+    position:absolute;
+    font-size:80px;
+    color:red;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%) scale(0);
+    opacity:0;
+    pointer-events:none;
+}
+
+.heart.show{
+    animation:pop 0.6s ease;
+}
+
+@keyframes pop{
+    0%{transform:translate(-50%,-50%) scale(0); opacity:0;}
+    50%{transform:translate(-50%,-50%) scale(1.4); opacity:1;}
+    100%{transform:translate(-50%,-50%) scale(0); opacity:0;}
+}
+
+/* USER INFO */
+.user{
+    position:absolute;
+    bottom:90px;
+    left:15px;
+    color:white;
+}
+
+.username{
+    color:red;
+    font-weight:bold;
+}
+
+/* UPLOAD */
+.upload{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:red;
+    color:black;
+    padding:12px 20px;
+    border-radius:30px;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="feed" id="feed">
+
+{% for v in videos %}
+<div class="videoBox" ondblclick="likeHeart(this)">
+
+    <video src="/uploads/{{v.filename}}" autoplay loop muted playsinline></video>
+
+    <div class="heart">❤️</div>
+
+    <div class="actions">
+        <div class="btn" onclick="like(this)">❤️</div>
+        <div class="btn">💬</div>
+        <div class="btn">↗</div>
+    </div>
+
+    <div class="user">
+        <div class="username">@user{{v.user_id}}</div>
+        <div>Red Black Feed</div>
+    </div>
+
+</div>
+{% endfor %}
+
+</div>
+
+<a class="upload" href="/upload">+ UPLOAD</a>
+
+<script>
+/* DOUBLE TAP HEART */
+function likeHeart(el){
+    let heart = el.querySelector(".heart");
+    heart.classList.add("show");
+
+    setTimeout(()=>{
+        heart.classList.remove("show");
+    },600);
+}
+
+/* BUTTON LIKE */
+function like(btn){
+    btn.innerHTML = "❤️";
+    btn.style.background = "red";
+}
+
+/* AUTO PLAY ONLY VISIBLE VIDEO */
+const videos = document.querySelectorAll("video");
+
+const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            entry.target.play();
+        }else{
+            entry.target.pause();
+        }
+    });
+},{threshold:0.7});
+
+videos.forEach(v=>observer.observe(v));
+</script>
+
+</body>
+</html>
+{% for p in posts %}
+<div style="border:1px solid red; margin:10px; padding:10px;">
+    <p>@{{p.user}}</p>
+    <video src="/uploads/{{p.file}}" width="100%" controls></video>
+    <p>{{p.description}}</p>
+</div>
+{% endfor %}
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+    margin:0;
+    background:black;
+    color:white;
+    font-family:Arial;
+}
+
+.post{
+    border-bottom:1px solid red;
+    padding:10px;
+}
+
+video{
+    width:100%;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🔥 NAHI FOND FEED</h2>
+
+<a href="/upload" style="color:red;">+ Upload</a>
+
+{% for p in posts %}
+<div class="post">
+    <p>@{{p.user}}</p>
+
+    <video controls>
+        <source src="/uploads/{{p.file}}">
+    </video>
+
+    <p>{{p.description}}</p>
+</div>
+{% endfor %}
+
+</body>
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+    background:black;
+    color:white;
+    font-family:Arial;
+}
+
+.post{
+    border-bottom:1px solid red;
+    padding:10px;
+}
+
+video{
+    width:100%;
+}
+
+button{
+    background:red;
+    border:none;
+    padding:5px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🔥 NAHI FOND FEED (DB SYSTEM)</h2>
+
+<a href="/upload" style="color:red;">+ Upload</a>
+
+{% for p in posts %}
+
+<div class="post">
+
+    <p>@{{ user_map[p.user_id] }}</p>
+
+    <video controls>
+        <source src="/uploads/{{p.filename}}">
+    </video>
+
+    <p>{{p.description}}</p>
+
+    <!-- LIKE -->
+    <a href="/like/{{p.id}}">
+        ❤️ Like
+    </a>
+
+    <!-- COMMENT -->
+    <form method="POST" action="/comment/{{p.id}}">
+        <input name="text" placeholder="comment">
+        <button>Send</button>
+    </form>
+
+</div>
+
+{% endfor %}
+
+</body>
+</html>

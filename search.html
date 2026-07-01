@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    background:black;
+    color:white;
+    font-family:Arial;
+}
+
+/* SEARCH BAR */
+.searchBox{
+    padding:10px;
+    display:flex;
+}
+
+input{
+    flex:1;
+    padding:10px;
+    border:1px solid red;
+    background:black;
+    color:white;
+}
+
+button{
+    background:red;
+    border:none;
+    padding:10px;
+}
+
+/* RESULT BOX */
+.result{
+    padding:10px;
+}
+
+.card{
+    border:1px solid red;
+    margin:5px;
+    padding:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🔎 NAHI FOND SEARCH</h2>
+
+<div class="searchBox">
+    <input id="q" placeholder="Search user, content or AI...">
+    <button onclick="search()">Search</button>
+</div>
+
+<button onclick="aiSearch()">🤖 Ask AI</button>
+
+<div id="result"></div>
+
+<script>
+
+/* NORMAL SEARCH */
+async function search(){
+
+    let q = document.getElementById("q").value;
+
+    let res = await fetch("/search?q=" + q);
+    let data = await res.json();
+
+    let html = "";
+
+    html += "<h3>👤 Users</h3>";
+    data.users.forEach(u=>{
+        html += `<div class="card">@${u}</div>`;
+    });
+
+    html += "<h3>🎬 Videos</h3>";
+    data.videos.forEach(v=>{
+        html += `<div class="card">${v.title}</div>`;
+    });
+
+    document.getElementById("result").innerHTML = html;
+}
+
+/* AI SEARCH */
+async function aiSearch(){
+
+    let q = document.getElementById("q").value;
+
+    let res = await fetch("/ai-search",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({q})
+    });
+
+    let data = await res.json();
+
+    document.getElementById("result").innerHTML =
+        `<div class="card">🤖 ${data.ai_result}</div>`;
+}
+
+</script>
+
+</body>
+</html>
